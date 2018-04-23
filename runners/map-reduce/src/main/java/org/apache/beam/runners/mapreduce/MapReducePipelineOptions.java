@@ -27,6 +27,9 @@ import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 
+
+
+
 /**
  * {@link PipelineOptions} for {@link MapReduceRunner}.
  */
@@ -47,6 +50,19 @@ public interface MapReducePipelineOptions extends PipelineOptions {
   @Default.String("/tmp/mapreduce/")
   String getFileOutputDir();
   void setFileOutputDir(String fileOutputDir);
+
+  @Description("Sets counts of reducers (mapred.reduce.tasks property).")
+  @Default.Integer(1)
+  Integer getReducers();
+  void setReducers(Integer value);
+
+  @Description("Set name of the queue job should be submitted to (mapred.job.queue.name property).")
+  String getJobQueue();
+  void setJobQueue(String value);
+
+  @Description("Sets MapReduce mapreduce.reduce.memory.mb property.")
+  Integer getMapperMem();
+  void setMapperMem(Integer value);
 
   /**
    * Returns the {@link Class} that constructs MapReduce job through Beam.

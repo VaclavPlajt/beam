@@ -90,8 +90,7 @@ public class MapReduceRunner extends PipelineRunner<PipelineResult> {
     List<Job> jobs = new ArrayList<>();
     int stageId = 0;
     for (Graphs.FusedStep fusedStep : fusedGraph.getFusedSteps()) {
-      Configuration config = new Configuration();
-      config.set("keep.failed.task.files", "true");
+      Configuration config = createMapReduceConfig();
 
       JobPrototype jobPrototype = JobPrototype.create(stageId++, fusedStep, options);
       LOG.info("Running job-{}.", stageId);
@@ -109,5 +108,23 @@ public class MapReduceRunner extends PipelineRunner<PipelineResult> {
       }
     }
     return new MapReducePipelineResult(jobs);
+  }
+
+  private Configuration createMapReduceConfig() {
+    Configuration config = new Configuration();
+    config.set("keep.failed.task.files", "true");
+    config.setInt("mapred.reduce.tasks property", options.getReducers());
+
+    String jobQueue = options.getJobQueue();
+    if (jobQueue != null){
+      config.set("mapred.job.queue.name", jobQueue);
+    }
+
+    Integer mapperMem = options.getMapperMem();
+    if (mapperMem != null){
+      config.setInt("mapreduce.reduce.memory.mb", mapperMem);
+    }
+
+    return config;
   }
 }
