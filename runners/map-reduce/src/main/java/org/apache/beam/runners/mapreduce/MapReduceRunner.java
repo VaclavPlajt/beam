@@ -113,7 +113,7 @@ public class MapReduceRunner extends PipelineRunner<PipelineResult> {
   private Configuration createMapReduceConfig() {
     Configuration config = new Configuration();
     config.set("keep.failed.task.files", "true");
-    config.setInt("mapred.reduce.tasks property", options.getReducers());
+    config.setInt("mapred.reduce.tasks", options.getReducers());
 
     String jobQueue = options.getJobQueue();
     if (jobQueue != null){
